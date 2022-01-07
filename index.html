@@ -7,7 +7,17 @@
   <title>Example</title>
 </head>
 <body>
-  <div id="root"></div>
+  <div id="root">
+    <!-- <div>
+      <div>
+        <h1>주제</h1>
+        <ul>
+          <li>React</li>
+          <li>Vue</li>
+        </ul>
+      </div>
+    </div> -->
+  </div>
 
   <script
    crossorigin
@@ -34,17 +44,30 @@
 
     // render( component, 적용할 DOMelement )
 
-
-    // 3. React.Fragment
+    
+    // 4. 복잡한 리액트 엘리먼트 모임
     ReactDOM.render(
       React.createElement(
-        React.Fragment,
+        "div",
         null,
-        `type이 "React 컴포넌트"입니다.`),
-      document.querySelector('#root')
+        React.createElement(
+          "div",
+          null,
+          React.createElement("h1", null, "주제"),
+          React.createElement("ul", null, React.createElement("li", null, "React")
+          )
+        )
+      ),
+      document.querySelector("#root")
     )
 
-    // fragment를 이용하면 자식요소들을 root에 넣을 때 다른 태그를 거치지 않고 바로 넣을 수 있다.
+    // 학습했던 내용까지는 createElement로 간단한 <h1>안녕하세요</h1> 이런 요소를 출력했다.
+    // 하지만 실제 현업에서는 <div><div><h1>주제</h1><ul><li>React</li></ul></div></div> 같이 복잡한 구조로 작업한다.
+    
+    // React.createElement로 작업하는 한계가 있음 :
+    // 구조가 복잡해지면 가독성이 떨어지고 복잡해짐
+    // 위에 작성한 코드는 순수한 React.createElement를 활용해서 순수한 자바스크립트 코드로 짠 것임
+    // 이렇게는 효율성이 떨어지기 때문에 순수한 js 코드가 아닌 React의 기능을 이용하는 방법을 배울 것임!
   </script>
 </body>
 </html>
