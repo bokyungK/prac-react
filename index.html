@@ -7,8 +7,7 @@
   <title>Example</title>
 </head>
 <body>
-  <div id="root">
-  </div>
+  <div id="root"></div>
 
   <script
    crossorigin
@@ -26,53 +25,33 @@
     console.log(React);
     console.log(ReactDOM);
 
-    const title = "주제";
 
-    // render( component, 적용할 DOMelement )
+
+    // function 키워드 컴포넌트로 props 연습
+    function Component(props) {
+      return (
+        <div><h1>{props.message} 이것은 함수로 만든 컴포넌트 입니다.</h1></div>
+      );
+    }
+    // function 컴포넌트는 들어오는 props를 인자로 사용한다.
+
+
+    // props에 값을 전달하지 않아도 기본값을 설정, 전달하는 방법
+      // 방법1
+      // ( class, function 컴포넌트에 모두 사용 가능 )
+      Component.defaultProps = {
+        message: "기본값",
+      };
+      // 방법2
+      // ( class 컴포넌트에만 사용 가능 )
+      // 방법은 작성한 class component의 코드 참조
+    // * 이 코드는 당연히 React.render 코드 전에 작성해야 적용됨!
+      
     ReactDOM.render(
-      <div a="a">
-        <div>
-          <h1>{title}</h1>
-          <ul>
-            <li>React</li>
-            <li>Vue</li>
-         </ul>
-        </div>
-      </div>,
-    // 여기까지 코드는 React.createElement(type, props, children)으로 작성했던 부분과 같은 영역이다.
-    // 각 영역이 어떻게 적용되었는지 알아보자.
-
-    // 작성한 태그는 type에 적용된다.
-    // 태그의 attribute처럼 작성한 부분은 props에 적용된다. 
-    // **최상의 태그인 div를 제외한 그 내부영역이 children에 적용된다.
+      <Component />, // or <Component message="안녕하세요!!!" />
+      // React.querySelector()에서 props로 넣어주던 데이터를 attribute 방식으로 작성해서 전달
       document.querySelector("#root")
-    );
-
-    // React.createElement 방식보다 간단한 방법은 없을까?
-      // JSX로 작성하면 가독성이 좋고 복잡한 구조에서도 명시적이다!
-
-    // babel은 추가된 상위 JS 작성을 지원하고, JSX로 작성된 코드를 순수한 JS 코드로 변환할 수 있게 만들어준다.
-      // 예를 들면, <div></div>는 React.createElement('div', null); 로 변환된다.
-
-    // 왜 JSX를 사용할까?
-      // React.createElement와 비교해서 가독성 완승
-      // babel과 같은 컴파일 과정이 있기 때문에, 문법적 오류를 인지하기 쉽다.
-
-    // JSX 문법
-      // 최상위 요소가 하나여야 한다. ( 최상의 요소와 같은 레벨인 요소가 있으면 안됨 )
-      // 자식들을 상위 태그 없이 바로 렌더링하고 싶으면 fragment를 사용한다. ( <>자식들</>)
-      
-      // js에서 ${}하듯이 jsx 안에서 표현식을 사용하려면, {표현식}으로 이용
-      // if문은 표현식이 아닌 그냥 문장이기 때문에 사용할 수 없고,
-        // 삼항 연산자 또는 &&를 사용한다.
-      
-      // style을 이용해 인라인 스타일링이 가능하다. ( with props )
-      // class 대신 className을 사용해 class를 적용 ( class js의 예약어이기 때문에 className 사용 후 변환됨 )
-      // 자식 요소가 있으면 꼭 따로 닫아야 하고, 자식요소가 없다면 열면서 닫아야 한다.
-        // <p> 안녕 </p>
-        // <br />
-
-      // 최상위 요소를 리턴하는 경우 ()로 감싸야 한다. ( 요즘에는 필수는 아님, 작성하다가 리턴이 안되면 사용해도 됨 )
+    )
   </script>
 </body>
 </html>
