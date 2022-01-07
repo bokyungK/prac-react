@@ -25,24 +25,35 @@
     console.log(React);
     console.log(ReactDOM);
 
-  function Component() {
-    return (
-      <div>
-        <button
-          onClick={() => {
-            console.log('클릭');
-          }}
-        >
-          클릭
-        </button>
-      </div>
-    );
-  }
+    class Component extends React.Component {
+      state = {
+        count: 0,
+      };
 
-  ReactDOM.render(
-    <Component />, // jsx 문법으로 작성
-    document.querySelector('#root')
-  )
+      render() {
+        return (
+          <div>
+            <p>{this.state.count}</p>
+            <button
+              onMouseEnter={() => {
+                console.log('클릭');
+                this.setState((state) => ({
+                  ... state,
+                  count: state.count + 1,
+                }));
+              }}
+            >
+              클릭
+            </button>
+          </div>
+        );
+      };
+    }
+
+    ReactDOM.render(
+      <Component />,
+      document.querySelector('#root')
+    )
   </script>
 </body>
 </html>
