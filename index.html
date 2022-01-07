@@ -34,11 +34,21 @@
 
     // render( component, 적용할 DOMelement )
 
-    // 1. 태그 이름 문자열 type 작성해보기
-    ReactDOM.render(
-      React.createElement('h1', null, 'type이 "태그 이름 문자열" 입니다.'),
+    // 사용할 컴포넌트 정의
+    const Component = () => {
+      return React.createElement(
+        'p', 
+        null, 
+        `type이 "React 컴포넌트"입니다.`
+      );
+    };
+
+    // 2. 리액트 컴포넌트 type
+    // <Component /> => <p>type 이~ </p>
+    ReactDom.render(
+      React.createElement(Compoonent, null, null), // <Component />와 같다
       document.querySelector('#root')
-    );
+    )
   </script>
 </body>
 </html>
