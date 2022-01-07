@@ -25,29 +25,54 @@
     console.log(React);
     console.log(ReactDOM);
 
+    // event 되는 함수를 분리해서 작성하기 ** 현업에서는 이렇게 사용
     class Component extends React.Component {
       state = {
         count: 0,
       };
 
+      // this 바인드 방법
+      constructor(props) {
+        super(props);
+        
+        this.click = this.click.bind(this);
+      }
+
       render() {
         return (
           <div>
             <p>{this.state.count}</p>
-            <button
-              onMouseEnter={() => {
-                console.log('클릭');
-                this.setState((state) => ({
-                  ... state,
-                  count: state.count + 1,
-                }));
-              }}
-            >
-              클릭
-            </button>
+            <button onClick={this.click}>클릭</button>
           </div>
         );
       };
+
+      click() {
+        console.log('클릭');
+        this.setState((state) => ({
+          ... state,
+          count: state.count + 1,
+        }));
+      }
+      // dom과 함수 연결하는 부분 주의
+      // click();이 아니라 this.click임!
+
+      // 방법1
+      // 연결할 함수를 component 하단에 작성
+      // state 아래에 바인드 코드 작성
+      // constructor(props) {
+      //   super(props);
+        
+      //   this.click = this.click.bind(this);
+      // }
+
+      // 방법2 다른 작업 없이, click 함수를 화살표 함수로 바꾸기만 하면 됨
+      // click = () =>  {
+      //   console.log('클릭');
+      //   this.setState((state) => ({
+      //     ... state,
+      //     count: state.count + 1,
+      //   }));
     }
 
     ReactDOM.render(
