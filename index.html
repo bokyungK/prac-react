@@ -25,60 +25,40 @@
     console.log(React);
     console.log(ReactDOM);
 
-    // event 되는 함수를 분리해서 작성하기 ** 현업에서는 이렇게 사용
-    class Component extends React.Component {
+    class App extends React.Component {
       state = {
-        count: 0,
+        age: 39,
       };
 
-      // this 바인드 방법
       constructor(props) {
         super(props);
-        
-        this.click = this.click.bind(this);
+
+        console.log('construtor', props);
       }
 
       render() {
+        console.log('render');
         return (
           <div>
-            <p>{this.state.count}</p>
-            <button onClick={this.click}>클릭</button>
+            <h2>Hello {this.props.name} - {this.state.age}</h2>
           </div>
         );
       };
+      componentWillMount() {
+        console.log("componentWillMount");
+      } // 기존 리액트 라이프사이클 훅에 의해 자동으로 불려질 것!
 
-      click() {
-        console.log('클릭');
-        this.setState((state) => ({
-          ... state,
-          count: state.count + 1,
-        }));
-      }
-      // dom과 함수 연결하는 부분 주의
-      // click();이 아니라 this.click임!
-
-      // 방법1
-      // 연결할 함수를 component 하단에 작성
-      // state 아래에 바인드 코드 작성
-      // constructor(props) {
-      //   super(props);
+      componentDidMount() {
+        console.log("componentDidMount");
         
-      //   this.click = this.click.bind(this);
-      // }
-
-      // 방법2 다른 작업 없이, click 함수를 화살표 함수로 바꾸기만 하면 됨
-      // click = () =>  {
-      //   console.log('클릭');
-      //   this.setState((state) => ({
-      //     ... state,
-      //     count: state.count + 1,
-      //   }));
+        setInterval(() => {
+          console.log("setInterval");
+          this.setState(state => ({...state, age: state.age}));
+        }, 1000);
+      }
     }
 
-    ReactDOM.render(
-      <Component />,
-      document.querySelector('#root')
-    )
+    ReactDOM.render(<App name="Mark" />, document.querySelector('#root'));
   </script>
 </body>
 </html>
