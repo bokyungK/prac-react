@@ -53,8 +53,26 @@
         
         setInterval(() => {
           console.log("setInterval");
-          this.setState(state => ({...state, age: state.age}));
+          this.setState(state => ({...state, age: state.age + 1}));
         }, 1000);
+      }
+      
+      componentWillReceiveProps(nextProps) {
+        console.log("componentWillReceiveProps", nextProps);
+      }
+
+      shouldComponentUpdate(nextProps, nextState) {
+        console.log("shouldComponentUpdate", nextProps, nextState);
+        return false; // or true; 화면에 render할지 여부 결정
+      }
+
+      componentWillUpdate(nextProps, nextState) {
+        console.log("componentWillUpdate", nextProps, nextState);
+      }
+
+      // 여기부터는 새로 render된 이후임!
+      componentDidUpdate(prevProps, prevState) {
+        console.log("componentDidUpdate", prevProps, prevState);
       }
     }
 
