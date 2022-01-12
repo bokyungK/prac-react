@@ -25,65 +25,120 @@
     console.log(React);
     console.log(ReactDOM);
 
-    class App extends React.Component {
-      state = {
-        age: 39,
-      };
-      interval = null;
-      constructor(props) {
-        super(props);
+    // v16.3 이후에 바뀐 component lifecycle 학습
 
-        console.log('construtor', props);
-      }
+    // class App extends React.Component {
+    //   state = {
+    //     age: 39,
+    //   };
+    //   interval = null;
+    //   constructor(props) {
+    //     super(props);
+
+    //     console.log('construtor', props);
+    //   }
+
+    //   render() {
+    //     console.log('render');
+    //     return (
+    //       <div>
+    //         <h2>Hello {this.props.name} - {this.state.age}</h2>
+    //       </div>
+    //     );
+    //   };
+
+      // 변경 이후 새롭게 바뀐 부분
+    //   static getDerivedStateFromProps(nextProps, prevState) {
+    //     console.log("getDerivedStateFromProps", nextProps, prevState);
+
+    //     return {
+    //       age: 390, // 새로운 props가 들어왔을 때 바뀔 state 값
+    //                 // 이전에는 props가 변경될 때만 실행됐지만, 바뀐 버전은 render가 실행되기 전에 무조건 불리는 과정!
+    //     }           // 이전과 달리 props와 관계없이 state만 변되어도 불려짐
+    //   }
+
+    //   componentDidMount() {
+    //     console.log("componentDidMount");
+        
+    //     this.interval = setInterval(() => {
+    //       console.log("setInterval");
+    //       this.setState(state => ({...state, age: state.age + 1}));
+    //     }, 1000);
+    //   }
+      
+    //   // componentWillReceiveProps(nextProps) {
+    //   //   console.log("componentWillReceiveProps", nextProps);
+    //   // }
+
+    //   shouldComponentUpdate(nextProps, nextState) {
+    //     console.log("shouldComponentUpdate", nextProps, nextState);
+    //     return false; // or true; 화면에 render할지 여부 결정
+    //   }
+
+    //   // componentWillUpdate(nextProps, nextState) {
+    //   //   console.log("componentWillUpdate", nextProps, nextState);
+    //   // }
+
+    //   // 여기부터는 새로 render된 이후임!
+    //   componentDidUpdate(prevProps, prevState) {
+    //     console.log("componentDidUpdate", prevProps, prevState);
+    //   }
+
+    //   componentWillUnmount() {
+    //     clearInterVal(this.interval);
+    //     // interval을 사용하는 곳에서 this.interval = 로 멤버 변수를 선언헤야
+    //     // clear하는 메소드와 연결해서 사용할 수 있다
+    //     // interval이라는 변수는 선언되어있지 않기 때문에, render 안에 선언해줘야 함!
+
+    //     // 이 component가 사라진다면, 그 때 interval도 중지하게 됨
+    //   }
+    // }
+
+    let i = 0;
+
+    class App extends React.Component {
+      state = {list: []};
+      
 
       render() {
-        console.log('render');
         return (
-          <div>
-            <h2>Hello {this.props.name} - {this.state.age}</h2>
+          <div id="list" style={{ height: 100, overflow:"scroll" }}>
+              {this.state.list.map((i) => {
+                return <div>{i}</div>;
+              })}
           </div>
         );
-      };
-      componentWillMount() {
-        console.log("componentWillMount");
-      } // 기존 리액트 라이프사이클 훅에 의해 자동으로 불려질 것!
-
-      componentDidMount() {
-        console.log("componentDidMount");
-        
-        this.interval = setInterval(() => {
-          console.log("setInterval");
-          this.setState(state => ({...state, age: state.age + 1}));
-        }, 1000);
       }
       
-      componentWillReceiveProps(nextProps) {
-        console.log("componentWillReceiveProps", nextProps);
+      componentDidMount() {
+        setInterval(() => {
+          this.setState(state => ({
+            list: [...state.list, i++],
+          }));
+        }, 1000);
       }
 
-      shouldComponentUpdate(nextProps, nextState) {
-        console.log("shouldComponentUpdate", nextProps, nextState);
-        return false; // or true; 화면에 render할지 여부 결정
+  // render 전, 후의 상황을 이용하는 하는 부분 {
+      getSnapshotBeforeUpdate(prevProps, prevState) {
+        if (prevState.list.length === this.state.list.length) return null; // 이전 리스트의 길이와 현재 리스트의 길이가 같으면 null 값 반환,
+
+        // 아니라면 스크롤의 전체 높이와 변화하는 차이 값 확인하고 스냅샷으로 저장
+        const list = document.querySelector('#list'); // 리액트에서 추천하는 dom 접근 방식은 아님
+        return list.scrollHeight - list.scrollTop;
       }
 
-      componentWillUpdate(nextProps, nextState) {
-        console.log("componentWillUpdate", nextProps, nextState);
-      }
+      // 스냅샷이 잘 저장되었는지 확인하고 변동 요소 적용
+      componentDidUpdate(prevProps, prevState, snapshot) {
+        console.log(snapshot);
 
-      // 여기부터는 새로 render된 이후임!
-      componentDidUpdate(prevProps, prevState) {
-        console.log("componentDidUpdate", prevProps, prevState);
-      }
+        if (snapshot === null) return;
 
-      componentWillUnmount() {
-        clearInterVal(this.interval);
-        // interval을 사용하는 곳에서 this.interval = 로 멤버 변수를 선언헤야
-        // clear하는 메소드와 연결해서 사용할 수 있다
-        // interval이라는 변수는 선언되어있지 않기 때문에, render 안에 선언해줘야 함!
-
-        // 이 component가 사라진다면, 그 때 interval도 중지하게 됨
+        const list = document.querySelector('#list');
+        return list.scrollTop = list.scrollHeight - snapshot; 
       }
     }
+  // }
+    
 
     ReactDOM.render(<App name="Mark" />, document.querySelector('#root'));
   </script>
