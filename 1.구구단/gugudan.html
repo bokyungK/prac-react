@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>구구단</title>
+    </head>
+<body>
+<div id="root"></div>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<!--<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>-->
+<!--<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>-->
+<script type="text/babel">
+  'use strict';
+
+  function GuGuDan() {
+    const [value, setValue] = React.useState({
+        first: Math.ceil(Math.random() * 9),
+        second: Math.ceil(Math.random() * 9),
+        inputValue: '',
+        result: '',
+    });
+
+    const getResult = () => {
+        if (value.inputValue == value.first * value.second) {
+            setValue({
+                first: Math.ceil(Math.random() * 9),
+                second: Math.ceil(Math.random() * 9),
+                inputValue: '',
+                result: '딩동댕!',
+            })
+            return;
+        }
+        setValue({...value, result: '땡!'});
+    }
+
+
+    return (
+        <div>
+            <div>{value.first} 곱하기 {value.second}는?</div>
+            <input type='number' value={value.inputValue} onChange={(e) => setValue({...value, inputValue: e.target.value})}/>
+            <button onClick={() => getResult()}>입력</button>
+            <div>{value.result}</div>
+        </div>
+    )
+  }
+
+
+</script>
+<script type="text/babel">
+    ReactDOM.createRoot(document.querySelector('#root')).render(<GuGuDan />);
+</script>
+</body>
+</html>
